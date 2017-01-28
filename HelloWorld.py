@@ -21,8 +21,10 @@ y = tf.nn.softmax(tf.matmul(x, W) + b)
 # コスト関数
 cross_entropy = -tf.reduce_sum(y_ * tf.log(y))
 # コスト関数を、0.01ずつ変えて最適化
+# 実験に使ったステップ長は、0.5,0.1,0.05,0.001,0.0005
 train_step = tf.train.GradientDescentOptimizer(0.001).minimize(cross_entropy)
 start = time.time()
+# 実験に使った試行回数は、500,1000,5000,10000
 for i in range(1000):
     # 50の訓練サンプルをロード
     batch = mnist.train.next_batch(50)
@@ -33,9 +35,6 @@ train_end = time.time()
 correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
 # 正確性の計算
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
-check_end = time.time()
 # 出力
 print(accuracy.eval(feed_dict={x: mnist.test.images, y_: mnist.test.labels}))
 print("Train:" + (train_end - start).__str__())
-print("Check:" + (check_end - train_end).__str__())
-print("Total:" + (check_end - start).__str__())
